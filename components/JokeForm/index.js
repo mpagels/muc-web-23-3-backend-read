@@ -1,31 +1,10 @@
-import useSWR from "swr";
-
-export default function JokeForm() {
-  const { mutate: refetchJokeData } = useSWR("/api/jokes");
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-    const jokeData = Object.fromEntries(formData);
-
-    const response = await fetch("/api/jokes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(jokeData),
-    });
-
-    if (response.ok) {
-      refetchJokeData();
-    }
-
-    event.target.reset();
-  }
-
+export default function JokeForm({ value, onSubmit, isEditMode }) {
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="joke-input">Enter a new joke</label>
-      <input type="text" id="joke-input" name="joke" />
+    <form onSubmit={onSubmit}>
+      <label htmlFor="joke-input">
+        {isEditMode ? "Edit the joke" : "Enter a new joke"}
+      </label>
+      <input type="text" id="joke-input" name="joke" defaultValue={value} />
       <button type="submit">Submit</button>
     </form>
   );
