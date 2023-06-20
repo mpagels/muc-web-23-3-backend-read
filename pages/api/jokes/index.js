@@ -12,11 +12,12 @@ export default async function handler(request, response) {
   if (request.method === "POST") {
     try {
       const jokeData = request.body;
-      await Joke.create(jokeData);
+      await Joke.create({ ...jokeData, id: "20" });
 
       response.status(201).json({ status: "joke created" });
     } catch (error) {
       console.log(error);
+      response.status(500).json({ status: "error", message: error });
     }
   }
 }
